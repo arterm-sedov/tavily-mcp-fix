@@ -1,44 +1,19 @@
-# Tavily MCP Fix Skill
+# Tavily MCP Fix
 
 A skill for fixing "Client Not Registered" OAuth authentication errors with Tavily MCP.
 
-## Problem
+## Why This Skill Exists
 
-When using Tavily MCP tools, you may encounter:
+Tavily MCP uses OAuth with PKCE (Proof Key for Code Exchange). The client generates a `client_id` that must be registered with Tavily's auth server. When credentials expire, Tavily resets their registry, or cached data gets corrupted—you get the dreaded "Client Not Registered" error.
 
-```
-Client Not Registered
-The client ID d27dc5f1-ed03-427e-b7a2-598575e657cb was not found in the server's client registry.
-```
-
-This happens when:
-- Client credentials expire
-- Tavily resets their client registry
-- Cached credentials become corrupted
-
-## Solution
-
-This skill clears all cached OAuth credentials and triggers a fresh authentication flow with Tavily's servers.
+The fix is simple: clear caches and re-authenticate. But the steps are tedious and easy to forget. This skill automates the process and provides clear guidance when you encounter this error.
 
 ## Quick Fix
 
-Run the automated fix script:
-
-```bash
-~/.agents/skills/tavily-mcp-fix/scripts/fix-tavily-mcp-auth.sh
-```
-
-Or run manually:
-
-```bash
-# Clear all Tavily MCP caches
-rm -rf ~/.mcp-auth/mcp-remote-*/
-rm -rf ~/.cursor/plugins/tavily-cursor-plugin/;
-rm -rf ~/.cursor/plugins/cache/cursor-public/tavily/;
-
-# Trigger re-authentication
-npx mcp-remote https://mcp.tavily.com/mcp
-```
+| Situation | Command |
+|-----------|---------|
+| Automated fix | `~/.agents/skills/tavily-mcp-fix/scripts/fix-tavily-mcp-auth.sh` |
+| Manual fix | `rm -rf ~/.mcp-auth/mcp-remote-*/ && npx mcp-remote https://mcp.tavily.com/mcp` |
 
 ## Installation
 
@@ -77,6 +52,10 @@ skills:
 - [Tavily MCP Documentation](https://docs.tavily.com/documentation/mcp)
 - [OAuth 2.0 Dynamic Client Registration (RFC 7591)](https://datatracker.ietf.org/doc/html/rfc7591)
 - [MCP Remote CLI](https://github.com/modelcontextprotocol/mcp-cli)
+
+## About
+
+Fix Tavily MCP "Client Not Registered" OAuth authentication errors
 
 ## License
 
